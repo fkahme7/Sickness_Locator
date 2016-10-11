@@ -2,12 +2,7 @@ package com.a500.sweng.sickness_locator;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.util.Log;
 
-import android.database.Cursor;
-import android.database.DatabaseUtils;
-
-import com.a500.sweng.sickness_locator.db.SicknessDataSource;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -17,13 +12,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private SicknessDataSource mDataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        mDataSource = new SicknessDataSource(MapsActivity.this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -55,14 +48,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.addMarker(new MarkerOptions().position(latLng).title("Added Marker!"));
             }
         });
-
-        mDataSource.insertSickness();
-        Cursor cursor = mDataSource.selectAllSicknesses();
-        while (cursor.moveToNext()) {
-            float lat = cursor.getFloat(cursor.getColumnIndex("LATITUDE"));
-            float lng = cursor.getFloat(cursor.getColumnIndex("LONGITUDE"));
-            LatLng dbLatLng = new LatLng(lat, lng);
-            mMap.addMarker(new MarkerOptions().position(dbLatLng).title("Added Marker From Database!"));
-        }
     }
 }
