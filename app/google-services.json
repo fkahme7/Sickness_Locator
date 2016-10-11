@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "328678207609",
+    "firebase_url": "https://illness-locator-1473200255701.firebaseio.com",
+    "project_id": "illness-locator-1473200255701",
+    "storage_bucket": "illness-locator-1473200255701.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:328678207609:android:e75f07c6a2ea7fc7",
+        "android_client_info": {
+          "package_name": "com.a500.sweng.sickness_locator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "328678207609-8h3pgm74f9j2juhbjsqupvgfmcic9mka.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5bdqd3c0RYA0phBPvZwS_l6a1usnRn1w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
