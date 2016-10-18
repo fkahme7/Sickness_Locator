@@ -33,7 +33,7 @@ public class SicknessEntryActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
             case R.id.menu_settings:
-                startActivity(new Intent(this, UserSettings.class));
+                startActivity(new Intent(this, UserSettingsActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
