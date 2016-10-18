@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Sickness Locator</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps">Sickness Map</string>
+    <string name="title_activity_main">Reports</string>
+    <string name="title_activity_settings">User Settings</string>
+    <string name="title_activity_sickness__entry">Enter New Sickness</string>
     <string name="enter_sickness">Enter Sickness</string>
 </resources>
