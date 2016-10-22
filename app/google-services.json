@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "328678207609-rrh0aifdh6r9oc8ad6mgjl4ihgv4jbt3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.a500.sweng.sickness_locator",
+            "certificate_hash": "F4FA35A19F3B9A81A3C5207C5C17336DB5E060FD"
+          }
+        },
+        {
           "client_id": "328678207609-8h3pgm74f9j2juhbjsqupvgfmcic9mka.apps.googleusercontent.com",
           "client_type": 3
         }
