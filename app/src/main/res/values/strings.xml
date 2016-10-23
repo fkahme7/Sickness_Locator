@@ -3,7 +3,9 @@
     <string name="title_activity_maps">Sickness Map</string>
     <string name="title_activity_main">Reports</string>
     <string name="title_activity_settings">User Settings</string>
-    <string name="title_activity_sickness__entry">Enter New Sickness</string>
+    <string name="title_activity_sickness_entry">Enter New Sickness</string>
+    <string name="title_activity_reset">Reset Password</string>
+    <string name="title_activity_register">Create An Account</string>
     <string name="enter_sickness">Enter Sickness</string>
 
     <string name="action_sign_in_short">Register</string>
