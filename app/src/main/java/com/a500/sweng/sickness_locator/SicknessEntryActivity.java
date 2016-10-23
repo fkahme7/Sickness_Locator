@@ -12,12 +12,12 @@ public class SicknessEntryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sickness__entry);
+        setContentView(R.layout.activity_sickness_entry);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.my_options_menu, menu);
+        inflater.inflate(R.menu.menu_options, menu);
         return true;
     }
 
