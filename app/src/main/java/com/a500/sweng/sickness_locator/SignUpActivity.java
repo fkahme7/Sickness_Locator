@@ -20,6 +20,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import com.a500.sweng.sickness_locator.models.User;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -27,6 +30,7 @@ public class SignUpActivity extends AppCompatActivity {
     private Button btnSignIn, btnSignUp, btnResetPassword;
     private ProgressBar progressBar;
     private FirebaseAuth auth;
+    private DatabaseReference mDatabaseUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
+
+        mDatabaseUsers = FirebaseDatabase.getInstance().getReference("users");
 
         btnSignIn = (Button) findViewById(R.id.sign_in_button);
         btnSignUp = (Button) findViewById(R.id.sign_up_button);
@@ -101,11 +107,14 @@ public class SignUpActivity extends AppCompatActivity {
                                     Toast.makeText(SignUpActivity.this, "Authentication failed." + task.getException(),
                                             Toast.LENGTH_SHORT).show();
                                 } else {
-                                    User user = new User();
-
-                                    String name = inputName.getText().toString().trim();
-                                    user.createUser(name);
-
+                                    FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+                                    if (fUser != null) {
+                                        String name = inputName.getText().toString().trim();
+                                        User user = new User();
+                                        user.setEmail(name);
+                                        user.setName(fUser.getEmail());
+                                        mDatabaseUsers.child(fUser.getUid()).setValue(user);
+                                    }
                                     startActivity(new Intent(SignUpActivity.this, MapsActivity.class));
                                     finish();
                                 }
