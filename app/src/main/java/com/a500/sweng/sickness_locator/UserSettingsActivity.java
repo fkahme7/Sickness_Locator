@@ -7,7 +7,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TabHost;
 
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,11 +22,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import android.util.Log;
+import java.util.Arrays;
 
 public class UserSettingsActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabaseUser;
-    private EditText inputName, inputEmail;
+    private EditText inputName, inputEmail, inputDob;
+    private Button btnUpdateSettings;
+    private Spinner genderSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +38,9 @@ public class UserSettingsActivity extends AppCompatActivity {
 
         inputName = (EditText) findViewById(R.id.nameText);
         inputEmail = (EditText) findViewById(R.id.emailText);
+        inputDob = (EditText) findViewById(R.id.dobText);
+        btnUpdateSettings = (Button) findViewById(R.id.update_settings_button);
+        genderSpinner = (Spinner) findViewById(R.id.sexSpinner);
 
         FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
         mDatabaseUser = FirebaseDatabase.getInstance().getReference("users");
@@ -42,6 +51,12 @@ public class UserSettingsActivity extends AppCompatActivity {
 
                 inputName.setText(user.getName());
                 inputEmail.setText(user.getEmail());
+                inputDob.setText(user.getDob());
+
+                String gender = user.getGender() + "";
+
+                String[] genders = getResources().getStringArray(R.array.genders);
+                genderSpinner.setSelection(Arrays.asList(genders).indexOf(gender));
             }
 
             @Override
@@ -63,6 +78,18 @@ public class UserSettingsActivity extends AppCompatActivity {
         tabSpc.setContent(R.id.passwordTab);
         tabSpc.setIndicator("Password");
         tabHost.addTab(tabSpc);
+
+        btnUpdateSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View v){
+                String dob = inputDob.getText().toString().trim();
+                String gender = genderSpinner.getSelectedItem().toString();
+
+                FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+                mDatabaseUser.child(fUser.getUid()).child("dob").setValue(dob);
+                mDatabaseUser.child(fUser.getUid()).child("gender").setValue(gender);
+            }
+        });
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

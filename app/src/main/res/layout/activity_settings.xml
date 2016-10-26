@@ -94,6 +94,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/sexSpinner"
+                            android:entries="@array/genders"
                             android:layout_centerVertical="true"
                             android:layout_alignLeft="@+id/dobText"
                             android:layout_alignStart="@+id/dobText" />
@@ -110,6 +111,20 @@
                             android:layout_toRightOf="@+id/textView7"
                             android:layout_alignRight="@+id/nameText"
                             android:layout_alignEnd="@+id/nameText" />
+
+                        <Button
+                            android:id="@+id/update_settings_button"
+                            style="?android:textAppearanceSmall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorAccent"
+                            android:text="Update Settings"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginBottom="22dp" />
 
                     </RelativeLayout>
 
