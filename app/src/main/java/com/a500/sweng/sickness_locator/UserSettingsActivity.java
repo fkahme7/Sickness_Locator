@@ -1,19 +1,55 @@
 package com.a500.sweng.sickness_locator;
 
+import com.a500.sweng.sickness_locator.models.User;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TabHost;
 
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import android.util.Log;
+
 public class UserSettingsActivity extends AppCompatActivity {
+
+    private DatabaseReference mDatabaseUser;
+    private EditText inputName, inputEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        inputName = (EditText) findViewById(R.id.nameText);
+        inputEmail = (EditText) findViewById(R.id.emailText);
+
+        FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+        mDatabaseUser = FirebaseDatabase.getInstance().getReference("users");
+        mDatabaseUser.child(fUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+
+                inputName.setText(user.getName());
+                inputEmail.setText(user.getEmail());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("DatabaseError", "Failed to read value.", error.toException());
+            }
+        });
 
         TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
 
