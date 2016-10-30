@@ -1,19 +1,21 @@
 package com.a500.sweng.sickness_locator.models;
 
-public class Sickness {
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+
+import android.util.Log;
+
+public class SicknessEntry {
     public String type;
     public String sickness;
     public String severity;
     public int daysSick;
     public float latitude;
     public float longitude;
+    public String userId;
 
-    public Sickness(String type, String sickness, String severity, int daysSick) {
-        this.type = type;
-        this.sickness = sickness;
-        this.severity = severity;
-        this.daysSick = daysSick;
-    }
+    public SicknessEntry() {}
 
     public String getType() {
         return type;
@@ -61,5 +63,27 @@ public class Sickness {
 
     public void setLongitude(float longitude) {
         this.longitude = longitude;
+    }
+
+    public String getUserId() { return userId; }
+
+    public void setUserId(String userId) { this.userId = userId; }
+
+    public float getMarkerColor() {
+        FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        // Set Market Blue if marker is for current user
+        if (fUser.getUid().equals(this.userId)) {
+            return BitmapDescriptorFactory.HUE_AZURE;
+        }
+
+        // Otherwise set the marker color based on severity
+        if (this.severity.toLowerCase().equals("high")) {
+            return BitmapDescriptorFactory.HUE_RED;
+        } else if (this.severity.toLowerCase().equals("medium")) {
+            return BitmapDescriptorFactory.HUE_ORANGE;
+        } else {
+            return BitmapDescriptorFactory.HUE_YELLOW;
+        }
     }
 }

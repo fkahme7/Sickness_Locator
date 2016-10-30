@@ -4,19 +4,34 @@ import android.os.Bundle;
 import android.content.Intent;
 
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.a500.sweng.sickness_locator.models.SicknessEntry;
+import com.a500.sweng.sickness_locator.models.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Arrays;
+
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private DatabaseReference mDatabaseSicknessEntries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,15 +81,39 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+        mDatabaseSicknessEntries = FirebaseDatabase.getInstance().getReference("sicknessEntries");
+        mDatabaseSicknessEntries.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    SicknessEntry entry = postSnapshot.getValue(SicknessEntry.class);
+
+                    LatLng position = new LatLng(entry.getLatitude(), entry.getLongitude());
+                    //mMap.addMarker(new MarkerOptions().position(position).title(entry.getType() + ": " + entry.getSickness()));
+                    mMap.addMarker(new MarkerOptions()
+                            .position(position)
+                            .icon(BitmapDescriptorFactory.defaultMarker(entry.getMarkerColor()))
+                            .title(entry.getType() + ": " + entry.getSickness())
+                            .snippet("This is a test!")
+                    );
+                    mMap.moveCamera(CameraUpdateFactory.zoomTo(15.0f));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("DatabaseError", "Failed to read value.", error.toException());
+            }
+        });
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                mMap.addMarker(new MarkerOptions().position(latLng).title("Added Marker!"));
+            mMap.addMarker(new MarkerOptions().position(latLng).title("Added Marker!"));
             }
         });
     }
