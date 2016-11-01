@@ -101,7 +101,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             .position(position)
                             .icon(BitmapDescriptorFactory.defaultMarker(entry.getMarkerColor()))
                             .title(entry.getType() + ": " + entry.getSickness())
-                            .snippet("This is a test!")
+                            .snippet("Sickness Information will be display here. Website link will also be here.")
                     );
                     mMap.moveCamera(CameraUpdateFactory.zoomTo(15.0f));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
@@ -139,7 +139,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
             Address address = addressList.get(0);
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+            //mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         }
     }
