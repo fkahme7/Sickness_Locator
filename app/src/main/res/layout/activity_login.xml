@@ -15,7 +15,7 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="572dp"
         android:background="@color/colorPrimaryDark"
         android:gravity="center"
         android:orientation="vertical"
@@ -72,6 +72,10 @@
             android:text="@string/btn_login"
             android:textColor="@android:color/black" />
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="7dip" />
+
         <com.facebook.login.widget.LoginButton
             android:id="@+id/login_button"
             android:layout_width="match_parent"
@@ -81,7 +85,7 @@
         <Button
             android:id="@+id/btn_reset_password"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_marginTop="20dip"
             android:text="@string/btn_forgot_password"
             android:textAllCaps="false"
@@ -90,7 +94,7 @@
         <Button
             android:id="@+id/btn_signup"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_marginTop="20dip"
             android:text="@string/btn_link_to_register"
             android:textAllCaps="false"
