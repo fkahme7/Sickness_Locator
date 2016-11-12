@@ -37,6 +37,7 @@
     <string name="btn_sign_out">Sign Out</string>
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to send you password reset instructions.</string>
+    <string name="facebook_app_id">1777516025798893</string>
 
     <string-array name="genders">
         <item>--Select--</item>
