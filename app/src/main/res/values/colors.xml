@@ -17,4 +17,13 @@
     <color name="btn_login_bg">#eceef1</color>
     <color name="lbl_name">#333333</color>
     <color name="btn_logut_bg">#ff6861</color>
+
+    <color name="blue">#07ABF2</color>
+    <color name="grey">#AAAAAA</color>
+
+
+    <color name="malaria_blue">#71D1F5</color>
+    <color name="dengue_blue">#00B3EE</color>
+    <color name="jaundice_blue">#00659C</color>
+
 </resources>

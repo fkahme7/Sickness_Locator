@@ -30,7 +30,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MapsActivity.class));
                 return true;
             case R.id.menu_reports:
-                startActivity(new Intent(this, MainActivity.class));
+                //startActivity(new Intent(this, ReportsActivity.class));
+                Intent intent = new Intent(this, ReportsActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.menu_settings:
                 startActivity(new Intent(this, UserSettingsActivity.class));

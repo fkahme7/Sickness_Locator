@@ -7,6 +7,7 @@
     <string name="title_activity_reset">Reset Password</string>
     <string name="title_activity_register">Create An Account</string>
     <string name="enter_sickness">Enter Sickness</string>
+    <string name="title_activity_report">Reports</string>
 
     <string name="action_sign_in_short">Register</string>
     <string name="email">Email</string>
@@ -49,5 +50,12 @@
         <item>Low</item>
         <item>Medium</item>
         <item>High</item>
+    </string-array>
+
+    <string-array name="disease">
+        <item>All</item>
+        <item>Malaria</item>
+        <item>Dengue</item>
+        <item>Jaundice</item>
     </string-array>
 </resources>
