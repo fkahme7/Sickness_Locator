@@ -165,7 +165,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         .position(position)
                         .icon(BitmapDescriptorFactory.defaultMarker(entry.getMarkerColor()))
                         .title(entry.getType() + ": " + entry.getSickness())
-                        .snippet("Sickness Information will be display here. Website link will also be here.")
+                        .snippet("")
                     );
                 }
             }
