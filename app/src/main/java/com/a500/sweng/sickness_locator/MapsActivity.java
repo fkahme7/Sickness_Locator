@@ -71,6 +71,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.menu_settings:
                 startActivity(new Intent(this, UserSettingsActivity.class));
                 return true;
+            case R.id.logout:
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                mAuth.signOut();
+                startActivity(new Intent(MapsActivity.this, LoginActivity.class));
+                finish();
             default:
                 return super.onOptionsItemSelected(item);
         }
