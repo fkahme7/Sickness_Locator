@@ -303,7 +303,6 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
 
     }
 
-
     class LoadGraphDetails extends AsyncTask<String, Void, Void>{
 
         ProgressDialog mProgressDialog;
@@ -470,7 +469,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
 
             Legend l = linechart.getLegend();
 
-            // modify the legend ...
+            // modify the legend ...No longer needed
             // l.setPosition(LegendPosition.LEFT_OF_CHART);
             l.setForm(Legend.LegendForm.LINE);
 
