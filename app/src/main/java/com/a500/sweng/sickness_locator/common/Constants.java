@@ -4,6 +4,6 @@ import android.graphics.Color;
 
 public class Constants {
     public static final int[] CHART_COLORS = {
-            Color.rgb(113, 209, 245), Color.rgb(0, 179, 238), Color.rgb(0, 101, 156)
+            Color.rgb(113, 209, 245), Color.rgb(0, 179, 238), Color.rgb(0, 101, 156), Color.rgb(11, 69, 100), Color.rgb(68, 129, 161)
     };
 }
