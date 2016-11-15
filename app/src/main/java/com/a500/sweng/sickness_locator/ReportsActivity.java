@@ -40,6 +40,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,7 +50,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class ReportsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-        //implements AdapterView.OnItemSelectedListener {
+    //implements AdapterView.OnItemSelectedListener {
     //private static final String TAG = "ListDatasetsActivity";
 
     //protected GlobalCache gCache = GlobalCache.getInstance();
@@ -66,6 +67,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
     List<String> sickList = new ArrayList<String>();
     List<String> latList = new ArrayList<String>();
     List<String> checkedSickList = new ArrayList<String>();
+    List<String> spinnerItems = new ArrayList<String>();
     String[] arrayOfStrings;
     List<String> selectedSickList = new ArrayList<String>();
     List<Integer> sickCountList = new ArrayList<Integer>();
@@ -114,19 +116,15 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         linechart = (LineChart) findViewById(R.id.line);
         pieChart  = (PieChart) findViewById(R.id.pie);
         disease = (Spinner) findViewById(R.id.disease_spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, checkedSickList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        disease.setAdapter(adapter);
-        disease.setOnItemSelectedListener(this);
-        adapter.notifyDataSetChanged();
-        selectDisease = (TextView) findViewById(R.id.select_disease);
-
+        //selectDisease = (TextView) findViewById(R.id.select_disease);
+        buttonString="Line";
+        spinnerItems.add("All");
         serviceCall();
 
 
-       // new LoadGraphDetails().execute("");
-        buttonString="Line";
+//        new LoadGraphDetails().execute("");
 
+        //disease.setVisibility(View.VISIBLE);
         timeSeries.setOnClickListener(
                 new OnClickListener() {
                     @Override
@@ -137,14 +135,14 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                         pieChart.setVisibility(View.GONE);
                         predictiveChart.setVisibility(View.GONE);
                         disease.setVisibility(View.GONE);
-                        selectDisease.setVisibility(View.GONE);
+                        //selectDisease.setVisibility(View.GONE);
                         timeSeries.setBackgroundResource(R.color.blue);
                         barChart.setBackgroundResource(R.color.grey);
                         predictiveReport.setBackgroundResource(R.color.grey);
                         customChart.setBackgroundResource(R.color.grey);
                         //serviceCall();
                         if(!isLoaded) {
-                            loadXYvalues();
+ //                           loadXYvalues();
                         }
                         refreshListData2();
                     }
@@ -159,10 +157,10 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                         pieChart.setVisibility(View.GONE);
                         predictiveChart.setVisibility(View.GONE);
                         disease.setVisibility(View.GONE);
-                        selectDisease.setVisibility(View.GONE);
-                      //  serviceCall();
+                       // selectDisease.setVisibility(View.GONE);
+                        //  serviceCall();
                         if(!isLoaded) {
-                            loadXYvalues();
+//                            loadXYvalues();
                         }
                         refreshListData2();
                     }
@@ -177,10 +175,10 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                         pieChart.setVisibility(View.GONE);
                         predictiveChart.setVisibility(View.VISIBLE);
                         disease.setVisibility(View.GONE);
-                        selectDisease.setVisibility(View.GONE);
-                      //  serviceCall();
+                        //selectDisease.setVisibility(View.GONE);
+                        //  serviceCall();
                         if(!isLoaded) {
-                            loadXYvalues();
+//                           loadXYvalues();
                         }
                         refreshListData2();
                     }
@@ -194,87 +192,17 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                         linechart.setVisibility(View.GONE);
                         pieChart.setVisibility(View.VISIBLE);
                         predictiveChart.setVisibility(View.GONE);
-                        disease.setVisibility(View.GONE);
-                        selectDisease.setVisibility(View.VISIBLE);
-                      //  serviceCall();
+                        disease.setVisibility(View.VISIBLE);
+                        //  selectDisease.setVisibility(View.VISIBLE);
+                        //  serviceCall();
                         if(!isLoaded) {
-                            loadXYvalues();
+//                            loadXYvalues();
                         }
-
-                        arrayOfStrings = checkedSickList.toArray(new String[checkedSickList.size()]);
                         refreshListData2();
                     }
                 });
-
-        selectDisease.setOnClickListener(
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        selectDiseaseCall();
-                    }
-                });
-
     }
 
-    private void selectDiseaseCall() {
-        selectedSickList.clear();
-        AlertDialog.Builder mAlertDialogBuilder;
-        mAlertDialogBuilder = new AlertDialog.Builder(this);
-        mAlertDialogBuilder.setMessage("Select Disease");
-        mAlertDialogBuilder.setCancelable(false);
-        mAlertDialogBuilder.setItems(arrayOfStrings, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                // The 'which' argument contains the index position
-                // of the selected item
-                String sick = arrayOfStrings[which];
-                selectedSickList.add(sick);
-            }
-        });
-        mAlertDialogBuilder.setPositiveButton("Ok",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        dialog.dismiss();
-                        piechart();
-                    }
-                });
-        mAlertDialogBuilder.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-    }
-
-    private void piechart() {
-
-            float value = (sickCountList.get(selectedDisease));
-            //entries.add(new Entry(Float.parseFloat(value), i));
-
-            Log.i("disease", String.valueOf(value));
-            entries.add(new Entry((float)value, 0));
-            //i = i + 1;
-
-            PieDataSet dataset = new PieDataSet(entries, " ");
-            data = new PieData(selectedSickList, dataset);
-            data.setValueFormatter(new PercentFormatter());
-            data.setValueTextSize(13f);
-            data.setValueTextColor(Color.WHITE);
-            data.setValueTypeface(Typeface.DEFAULT_BOLD);
-            dataset.setColors(Constants.CHART_COLORS); //
-            dataset.setSliceSpace(0f);
-            pieChart.setDescription("Description");
-            pieChart.setData(data);
-            //pieChart.setDrawSliceText(false);
-
-            // pieChart.setHoleRadius(0f);
-            pieChart.setDrawHoleEnabled(false);
-            pieChart.setUsePercentValues(false);
-            pieChart.animateY(2000);
-
-    }
 
     private void loadXYvalues() {
         isLoaded=true;
@@ -284,27 +212,41 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                 int count = Collections.frequency(sickList, temp);
                 System.out.println(temp + ": " + count);
                 checkedSickList.add(temp);
+                spinnerItems.add(temp);
                 sickCountList.add(count);
 
             }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerItems);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            disease.setAdapter(adapter);
+            disease.setOnItemSelectedListener(this);
+//            adapter.notifyDataSetChanged();
         }
 
         Log.i("sickList", sickList.toString());
-        Log.i("checkedSickLvist", checkedSickList.toString());
+        Log.i("spinnerItems", spinnerItems.toString());
         Log.i("sickCount", sickCountList.toString());
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        selectedSickList.clear();
         diseaseName = parent.getItemAtPosition(position).toString();
-        selectedDisease = parent.getSelectedItemPosition();
+        selectedDisease = parent.getSelectedItemPosition()-1;
         Log.i("Graph_item : ", String.valueOf(selectedDisease));
         Log.i("Graph_item : ", diseaseName);
+
+        selectedSickList.add(diseaseName);
+
+        Log.i("Selected Sick : ", selectedSickList.toString());
 
 //        data.clearValues();
         entries.clear();
 
         if(diseaseName.equals("All")) {
+//            selectedSickList.add("All");
+
             for (int j=0; j<sickCountList.size();j++) {
                 Integer value = sickCountList.get(j);
                 //entries.add(new Entry(Float.parseFloat(value), i));
@@ -312,7 +254,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                 position = position + 1;
 
                 PieDataSet dataset = new PieDataSet(entries, " ");
-                PieData data = new PieData(selectedSickList, dataset);
+                PieData data = new PieData(checkedSickList, dataset);
                 data.setValueFormatter(new PercentFormatter());
                 data.setValueTextSize(13f);
                 data.setValueTextColor(Color.WHITE);
@@ -328,8 +270,6 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
             }
         }else{
 
-            selectedSickList.add(diseaseName);
-
             float value = (sickCountList.get(selectedDisease));
             //entries.add(new Entry(Float.parseFloat(value), i));
 
@@ -353,6 +293,8 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
             pieChart.setDrawHoleEnabled(false);
             pieChart.setUsePercentValues(false);
             pieChart.animateY(2000);
+
+
         }
     }
 
@@ -392,8 +334,9 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                 @Override
                 public void run() {
                     refreshListData2();
+//                    loadXYvalues();
                 }
-            },5000);
+            },10000);
         }
 
     }
@@ -416,7 +359,8 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                 latList.add(name2);
                 sickList.add(name1);
                 Log.i("groupList Array ", sickList.toString());
-
+                Log.i("sickness", "value = "+value);
+                Log.i("sickness", "value size = "+value.size());
             }
 
             @Override
@@ -441,8 +385,51 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         });
 
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                    loadXYvalues();
+
+                buttonString = "Line";
+                chart.setVisibility(View.GONE);
+                linechart.setVisibility(View.VISIBLE);
+                pieChart.setVisibility(View.GONE);
+                predictiveChart.setVisibility(View.GONE);
+                disease.setVisibility(View.GONE);
+                selectDisease.setVisibility(View.GONE);
+                timeSeries.setBackgroundResource(R.color.blue);
+                barChart.setBackgroundResource(R.color.grey);
+                predictiveReport.setBackgroundResource(R.color.grey);
+                customChart.setBackgroundResource(R.color.grey);
+                refreshListData2();
+            }
+        },5000);
 
 
+        //        loadXYvalues();
+//        refreshListData2();
+        /*queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // ...
+
+                Map<String, Object> value = (Map<String, Object>) dataSnapshot.getValue();
+                for(int i=0; i<value.size(); i++){
+
+                    String name1 = String.valueOf(value.get(i));
+                    String name2 = String.valueOf(value.get("latitude"));
+                    Log.i("sickness", "name1 = "+name1);
+                }
+//                Log.i("sickness", String.valueOf(value.get("sickness")));
+                Log.i("sickness", "value = "+value);
+                Log.i("sickness", "value size = "+value.size());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // ...
+            }
+        });*/
 
     }
 
@@ -466,10 +453,10 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
             //Log.i("daysSick Size ", String.valueOf(daysSick.size()));
 
             for (int j=0; j<sickCountList.size();j++) {
-                    Integer value = sickCountList.get(j);
-                    //entries.add(new Entry(Float.parseFloat(value), i));
-                    entries.add(new Entry((value), i));
-                    i = i + 1;
+                Integer value = sickCountList.get(j);
+                //entries.add(new Entry(Float.parseFloat(value), i));
+                entries.add(new Entry((value), i));
+                i = i + 1;
             }
             LineDataSet dataset = new LineDataSet(entries,"");
             LineData data = new LineData(checkedSickList, dataset);
@@ -518,8 +505,8 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
             if (valueSet1 != null) {
                 BarDataSet barDataSet1 = new BarDataSet(valueSet1, "");
                 barDataSet1.setColor(Color.rgb(0, 0, 225));
-               // BarDataSet barDataSet2 = new BarDataSet(valueSet2, "Female");
-               // barDataSet2.setColor(Color.rgb(225, 0, 0));
+                // BarDataSet barDataSet2 = new BarDataSet(valueSet2, "Female");
+                // barDataSet2.setColor(Color.rgb(225, 0, 0));
 
                 dataSets = new ArrayList<>();
                 dataSets.add(barDataSet1);
@@ -591,8 +578,8 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
 */
                 dataSets = new ArrayList<>();
                 dataSets.add(barDataSet1);
-               // dataSets.add(barDataSet2);
-               // dataSets.add(barDataSet3);
+                // dataSets.add(barDataSet2);
+                // dataSets.add(barDataSet3);
                 // adapter.notifyDataSetChanged();
 
                 BarData data = new BarData(getXAxisValuesContent(), dataSets);

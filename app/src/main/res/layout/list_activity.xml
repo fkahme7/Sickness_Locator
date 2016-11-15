@@ -150,7 +150,7 @@
             android:layout_marginLeft="142dp"
             android:layout_marginStart="142dp"
             android:id="@+id/select_disease"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
     </LinearLayout>
 
