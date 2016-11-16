@@ -34,7 +34,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import android.location.LocationListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -42,7 +44,7 @@ public class SicknessEntryActivity extends AppCompatActivity {
     private Button btnSubmit, btnCancel;
     private Spinner typeSpinner, sicknessSpinner, severitySpinner;
     private EditText daysText;
-    private String typeString, sicknessString, severityString;
+    private String typeString, sicknessString, severityString, entryDate;
     private DatabaseReference mDatabaseEntries;
     private ProgressBar progressBar;
     private double latitude, longitude;
@@ -150,7 +152,7 @@ public class SicknessEntryActivity extends AppCompatActivity {
                     String sick = sicknessString.toString().trim();
                     String sever = severityString.toString().trim();
                     int days = Integer.parseInt(daysText.getText().toString().trim());
-
+                    entryDate = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
                     SicknessEntry entries = new SicknessEntry();
                     entries.setDaysSick(days);
                     entries.setSeverity(sever);
@@ -158,6 +160,7 @@ public class SicknessEntryActivity extends AppCompatActivity {
                     entries.setType(type);
                     entries.setLatitude(latitude);
                     entries.setLongitude(longitude);
+                    entries.setEntryDate(entryDate);
                     entries.setUserId(fUser.getUid());
 
                     mDatabaseEntries.child(fUser.getUid()).child(mDatabaseEntries.child(fUser.getUid()).push().getKey()).setValue(entries);
