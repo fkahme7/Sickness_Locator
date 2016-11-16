@@ -164,15 +164,34 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    SicknessEntry entry = postSnapshot.getValue(SicknessEntry.class);
+                    if (postSnapshot.getKey() != null) {
+                        for (DataSnapshot postSnapshot1 : postSnapshot.getChildren()) {
+                            if (!postSnapshot1.getKey().equals("daysSick") && !postSnapshot1.getKey().equals("latitude") && !postSnapshot1.getKey().equals("longitude") &&
+                                    !postSnapshot1.getKey().equals("markerColor") && !postSnapshot1.getKey().equals("severity") && !postSnapshot1.getKey().equals("sickness") &&
+                                    !postSnapshot1.getKey().equals("type") && !postSnapshot1.getKey().equals("userId") && !postSnapshot1.getKey().equals("entryDate")) {
+                                SicknessEntry entry = postSnapshot1.getValue(SicknessEntry.class);
 
-                    LatLng position = new LatLng(entry.getLatitude(), entry.getLongitude());
-                    mMap.addMarker(new MarkerOptions()
-                        .position(position)
-                        .icon(BitmapDescriptorFactory.defaultMarker(entry.getMarkerColor()))
-                        .title(entry.getType() + ": " + entry.getSickness())
-                        .snippet("")
-                    );
+                                LatLng position = new LatLng(entry.getLatitude(), entry.getLongitude());
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(position)
+                                        .icon(BitmapDescriptorFactory.defaultMarker(entry.getMarkerColor()))
+                                        .title(entry.getType() + ": " + entry.getSickness())
+                                        .snippet("")
+                                );
+                            }
+                            else{
+                                SicknessEntry entry = postSnapshot.getValue(SicknessEntry.class);
+
+                                LatLng position = new LatLng(entry.getLatitude(), entry.getLongitude());
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(position)
+                                        .icon(BitmapDescriptorFactory.defaultMarker(entry.getMarkerColor()))
+                                        .title(entry.getType() + ": " + entry.getSickness())
+                                        .snippet("")
+                                );
+                            }
+                        }
+                    }
                 }
             }
 
