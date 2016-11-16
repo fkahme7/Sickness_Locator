@@ -386,7 +386,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         });
 
 
-      /*  new Handler().postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                     loadXYvalues();
@@ -397,14 +397,14 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                 pieChart.setVisibility(View.GONE);
                 predictiveChart.setVisibility(View.GONE);
                 disease.setVisibility(View.GONE);
-                selectDisease.setVisibility(View.GONE);
+//                selectDisease.setVisibility(View.GONE);
                 timeSeries.setBackgroundResource(R.color.blue);
                 barChart.setBackgroundResource(R.color.grey);
                 predictiveReport.setBackgroundResource(R.color.grey);
                 customChart.setBackgroundResource(R.color.grey);
                 refreshListData2();
             }
-        },5000);*/
+        },5000);
 
 
         //        loadXYvalues();
