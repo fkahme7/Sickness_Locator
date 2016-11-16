@@ -222,6 +222,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
             disease.setAdapter(adapter);
             disease.setOnItemSelectedListener(this);
 //            adapter.notifyDataSetChanged();
+            //<code></code>
         }
 
         Log.i("sickList", sickList.toString());
