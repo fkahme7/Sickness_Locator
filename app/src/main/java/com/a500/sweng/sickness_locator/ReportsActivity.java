@@ -142,7 +142,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                         customChart.setBackgroundResource(R.color.grey);
                         //serviceCall();
                         if(!isLoaded) {
- //                           loadXYvalues();
+                            loadXYvalues();
                         }
                         refreshListData2();
                     }
@@ -160,7 +160,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                        // selectDisease.setVisibility(View.GONE);
                         //  serviceCall();
                         if(!isLoaded) {
-//                            loadXYvalues();
+                            loadXYvalues();
                         }
                         refreshListData2();
                     }
@@ -178,7 +178,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                         //selectDisease.setVisibility(View.GONE);
                         //  serviceCall();
                         if(!isLoaded) {
-//                           loadXYvalues();
+                           loadXYvalues();
                         }
                         refreshListData2();
                     }
@@ -196,7 +196,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                         //  selectDisease.setVisibility(View.VISIBLE);
                         //  serviceCall();
                         if(!isLoaded) {
-//                            loadXYvalues();
+                           loadXYvalues();
                         }
                         refreshListData2();
                     }
@@ -226,6 +226,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
 
         Log.i("sickList", sickList.toString());
         Log.i("spinnerItems", spinnerItems.toString());
+        Log.i("spinnerItems", checkedSickList.toString());
         Log.i("sickCount", sickCountList.toString());
     }
 
@@ -384,7 +385,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         });
 
 
-        new Handler().postDelayed(new Runnable() {
+      /*  new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                     loadXYvalues();
@@ -402,7 +403,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                 customChart.setBackgroundResource(R.color.grey);
                 refreshListData2();
             }
-        },5000);
+        },5000);*/
 
 
         //        loadXYvalues();

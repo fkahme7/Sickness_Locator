@@ -89,12 +89,12 @@ public class SicknessEntry {
         }
 
         // Otherwise set the marker color based on severity
-        if (this.severity.toLowerCase().equals("high")) {
+       /* if (this.severity.toLowerCase().equals("high")) {
             return BitmapDescriptorFactory.HUE_RED;
         } else if (this.severity.toLowerCase().equals("medium")) {
             return BitmapDescriptorFactory.HUE_ORANGE;
-        } else {
+        } else {*/
             return BitmapDescriptorFactory.HUE_YELLOW;
-        }
+        //}
     }
 }
