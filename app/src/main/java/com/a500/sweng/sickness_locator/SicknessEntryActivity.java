@@ -160,7 +160,7 @@ public class SicknessEntryActivity extends AppCompatActivity {
                     entries.setLongitude(longitude);
                     entries.setUserId(fUser.getUid());
 
-                    mDatabaseEntries.child(fUser.getUid()).setValue(entries);
+                    mDatabaseEntries.child(fUser.getUid()).child(mDatabaseEntries.child(fUser.getUid()).push().getKey()).setValue(entries);
                 }
                 startActivity(new Intent(SicknessEntryActivity.this, MapsActivity.class));
                 finish();
