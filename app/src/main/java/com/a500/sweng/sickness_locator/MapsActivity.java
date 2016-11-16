@@ -27,6 +27,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -134,6 +135,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.menu_settings:
                 startActivity(new Intent(this, UserSettingsActivity.class));
                 return true;
+            case R.id.logout:
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                mAuth.signOut();
+                startActivity(new Intent(MapsActivity.this, LoginActivity.class));
+                finish();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -158,15 +164,34 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    SicknessEntry entry = postSnapshot.getValue(SicknessEntry.class);
+                    if (postSnapshot.getKey() != null) {
+                        for (DataSnapshot postSnapshot1 : postSnapshot.getChildren()) {
+                            if (!postSnapshot1.getKey().equals("daysSick") && !postSnapshot1.getKey().equals("latitude") && !postSnapshot1.getKey().equals("longitude") &&
+                                    !postSnapshot1.getKey().equals("markerColor") && !postSnapshot1.getKey().equals("severity") && !postSnapshot1.getKey().equals("sickness") &&
+                                    !postSnapshot1.getKey().equals("type") && !postSnapshot1.getKey().equals("userId") && !postSnapshot1.getKey().equals("entryDate")) {
+                                SicknessEntry entry = postSnapshot1.getValue(SicknessEntry.class);
 
-                    LatLng position = new LatLng(entry.getLatitude(), entry.getLongitude());
-                    mMap.addMarker(new MarkerOptions()
-                        .position(position)
-                        .icon(BitmapDescriptorFactory.defaultMarker(entry.getMarkerColor()))
-                        .title(entry.getType() + ": " + entry.getSickness())
-                        .snippet("")
-                    );
+                                LatLng position = new LatLng(entry.getLatitude(), entry.getLongitude());
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(position)
+                                        .icon(BitmapDescriptorFactory.defaultMarker(entry.getMarkerColor()))
+                                        .title(entry.getType() + ": " + entry.getSickness())
+                                        .snippet("")
+                                );
+                            }
+                            else{
+                                SicknessEntry entry = postSnapshot.getValue(SicknessEntry.class);
+
+                                LatLng position = new LatLng(entry.getLatitude(), entry.getLongitude());
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(position)
+                                        .icon(BitmapDescriptorFactory.defaultMarker(entry.getMarkerColor()))
+                                        .title(entry.getType() + ": " + entry.getSickness())
+                                        .snippet("")
+                                );
+                            }
+                        }
+                    }
                 }
             }
 

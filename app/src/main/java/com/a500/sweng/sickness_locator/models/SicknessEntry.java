@@ -6,6 +6,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 import android.util.Log;
 
+import java.util.Date;
+
 public class SicknessEntry {
     public String type;
     public String sickness;
@@ -14,6 +16,7 @@ public class SicknessEntry {
     public double latitude;
     public double longitude;
     public String userId;
+    public String entryDate;
 
     public SicknessEntry() {}
 
@@ -23,6 +26,14 @@ public class SicknessEntry {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getEntryDate() {
+        return entryDate;
+    }
+
+    public void setEntryDate(String entryDate) {
+        this.entryDate = entryDate;
     }
 
     public String getSickness() {
