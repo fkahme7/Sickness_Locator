@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.a500.sweng.sickness_locator.common.Constants;
+import com.a500.sweng.sickness_locator.common.GlobalCache;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -92,7 +93,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
     Boolean isLoaded = false;
 
     int sickCount;
-
+    protected GlobalCache gCache = GlobalCache.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,8 +120,10 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         //selectDisease = (TextView) findViewById(R.id.select_disease);
         buttonString="Line";
         spinnerItems.add("All");
-        serviceCall();
+      //  serviceCall();
 
+        sickList = gCache.getSickEntry();
+        timeSeriesChart();
 
 //        new LoadGraphDetails().execute("");
 
@@ -129,22 +132,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                 new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        buttonString = "Line";
-                        chart.setVisibility(View.GONE);
-                        linechart.setVisibility(View.VISIBLE);
-                        pieChart.setVisibility(View.GONE);
-                        predictiveChart.setVisibility(View.GONE);
-                        disease.setVisibility(View.GONE);
-                        //selectDisease.setVisibility(View.GONE);
-                        timeSeries.setBackgroundResource(R.color.blue);
-                        barChart.setBackgroundResource(R.color.grey);
-                        predictiveReport.setBackgroundResource(R.color.grey);
-                        customChart.setBackgroundResource(R.color.grey);
-                        //serviceCall();
-                        if(!isLoaded) {
-                            loadXYvalues();
-                        }
-                        refreshListData2();
+                        timeSeriesChart();
                     }
                 });
         barChart.setOnClickListener(
@@ -201,6 +189,25 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                         refreshListData2();
                     }
                 });
+    }
+
+    private void timeSeriesChart() {
+        buttonString = "Line";
+        chart.setVisibility(View.GONE);
+        linechart.setVisibility(View.VISIBLE);
+        pieChart.setVisibility(View.GONE);
+        predictiveChart.setVisibility(View.GONE);
+        disease.setVisibility(View.GONE);
+        //selectDisease.setVisibility(View.GONE);
+        timeSeries.setBackgroundResource(R.color.blue);
+        barChart.setBackgroundResource(R.color.grey);
+        predictiveReport.setBackgroundResource(R.color.grey);
+        customChart.setBackgroundResource(R.color.grey);
+        //serviceCall();
+        if(!isLoaded) {
+            loadXYvalues();
+        }
+        refreshListData2();
     }
 
 
@@ -305,7 +312,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
 
     }
 
-    class LoadGraphDetails extends AsyncTask<String, Void, Void>{
+    /*class LoadGraphDetails extends AsyncTask<String, Void, Void>{
 
         ProgressDialog mProgressDialog;
         @Override
@@ -344,7 +351,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
 
     private void serviceCall() {
 
-        final DatabaseReference ref = db.getReference("sicknessEntries");
+        DatabaseReference ref = db.getReference("sicknessEntries");
 
         Query queryRef = ref.orderByChild("sickness");
 
@@ -386,7 +393,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
         });
 
 
-        new Handler().postDelayed(new Runnable() {
+        *//*new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                     loadXYvalues();
@@ -404,12 +411,12 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                 customChart.setBackgroundResource(R.color.grey);
                 refreshListData2();
             }
-        },5000);
+        },5000);*//*
 
 
         //        loadXYvalues();
 //        refreshListData2();
-        /*queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        *//*queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // ...
@@ -430,9 +437,9 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
             public void onCancelled(DatabaseError databaseError) {
                 // ...
             }
-        });*/
+        });*//*
 
-    }
+    }*/
 
 
     private void refreshListData2() {
@@ -483,6 +490,8 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
 
             XAxis xAxis = linechart.getXAxis();
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+            xAxis.setAdjustXLabels(false);
+            xAxis.setSpaceBetweenLabels(10);
             linechart.getAxisRight().setEnabled(false);
             linechart.animateXY(2000, 2000);
             linechart.invalidate();// to change the color scheme
@@ -519,6 +528,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                 chart.setDescription(" ");
                 XAxis xAxis = chart.getXAxis();
                 xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                xAxis.setAdjustXLabels(false);
                 chart.animateXY(2000, 2000);
                 chart.invalidate();
             }
@@ -588,6 +598,7 @@ public class ReportsActivity extends AppCompatActivity implements AdapterView.On
                 predictiveChart.setDescription(" ");
                 XAxis xAxis = predictiveChart.getXAxis();
                 xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                xAxis.setAdjustXLabels(false);
                 predictiveChart.getAxisRight().setEnabled(false);
                 predictiveChart.animateXY(2000, 2000);
                 predictiveChart.invalidate();

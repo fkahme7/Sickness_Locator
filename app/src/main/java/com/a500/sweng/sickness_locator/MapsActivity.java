@@ -11,6 +11,7 @@ import android.content.Intent;
 
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +20,7 @@ import android.widget.EditText;
 import android.location.Address;
 import android.location.Geocoder;
 
+import com.a500.sweng.sickness_locator.common.GlobalCache;
 import com.a500.sweng.sickness_locator.models.SicknessEntry;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,14 +30,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Android activity that displays a google map. The map displays all map markers for sickness entries
@@ -60,6 +66,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     // The minimum zoom the map is allowed to render
     private float mMaxZoom = 14.0f;
+    FirebaseDatabase db;
+    List<String> sickList = new ArrayList<String>();
+    protected GlobalCache gCache = GlobalCache.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +79,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, 11);
             return;
         }
-
+        db = FirebaseDatabase.getInstance();
+        serviceCall();
         // Try to get the users current location
         LocationManager locationmanager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria cri = new Criteria();
@@ -115,11 +125,56 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return true;
     }
 
-    /**
-     * Changes screen view.
-     * This is triggered by the user selecting an item on the menu. Will change the view to whichever
-     * option the user selects.
-     */
+    private void serviceCall() {
+
+        final DatabaseReference ref = db.getReference("sicknessEntries");
+
+        Query queryRef = ref.orderByChild("sickness");
+
+        queryRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChild) {
+                System.out.println(dataSnapshot.getValue());
+                Map<String, Object> value = (Map<String, Object>) dataSnapshot.getValue();
+                String name1 = String.valueOf(value.get("sickness"));
+                String name2 = String.valueOf(value.get("latitude"));
+                Log.i("sickness", String.valueOf(value.get("sickness")));
+
+               // latList.add(name2);
+                sickList.add(name1);
+                gCache.setSickEntry(sickList);
+                Log.i("groupList Array ", sickList.toString());
+                Log.i("sickness", "value = " + value);
+                Log.i("sickness", "value size = " + value.size());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.i("groupList Array ", "onChildChanged");
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.i("groupList Array ", "onChildRemoved");
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.i("groupList Array ", "onChildMoved");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.i("groupList Array ", "onChildCancelled");
+            }
+        });
+
+    }
+        /**
+         * Changes screen view.
+         * This is triggered by the user selecting an item on the menu. Will change the view to whichever
+         * option the user selects.
+         */
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_entry:
