@@ -112,7 +112,16 @@ public class SicknessEntryActivity extends BaseActivity {
         typeSpinner = (Spinner) findViewById(R.id.spinner);
         sicknessSpinner = (Spinner) findViewById(R.id.spinner2);
         severitySpinner = (Spinner) findViewById(R.id.spinner3);
-        daysText = (EditText) findViewById(R.id.editText) ;
+        daysText = (EditText) findViewById(R.id.editText);
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SicknessEntryActivity.this, MapsActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
