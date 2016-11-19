@@ -7,14 +7,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.content.Intent;
 
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.location.Address;
@@ -29,7 +24,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,7 +44,7 @@ import java.util.Map;
  * to access the users's current position.
  *
  */
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     // Reference to the firebase databse
     private DatabaseReference mDatabaseSicknessEntries;
@@ -116,15 +110,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
     }
 
-    /**
-     * Displays the menu.
-     */
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_options, menu);
-        return true;
-    }
-
     private void serviceCall() {
 
         final DatabaseReference ref = db.getReference("sicknessEntries");
@@ -170,35 +155,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
     }
-        /**
-         * Changes screen view.
-         * This is triggered by the user selecting an item on the menu. Will change the view to whichever
-         * option the user selects.
-         */
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_entry:
-                startActivity(new Intent(this, SicknessEntryActivity.class));
-                return true;
-            case R.id.menu_map:
-                startActivity(new Intent(this, MapsActivity.class));
-                return true;
-            case R.id.menu_reports:
-                Intent intent = new Intent(this, ReportsActivity.class);
-                startActivity(intent);
-                return true;
-            case R.id.menu_settings:
-                startActivity(new Intent(this, UserSettingsActivity.class));
-                return true;
-            case R.id.logout:
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                mAuth.signOut();
-                startActivity(new Intent(MapsActivity.this, LoginActivity.class));
-                finish();
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     /**
      * Manipulates the map once available.
@@ -221,30 +177,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     if (postSnapshot.getKey() != null) {
                         for (DataSnapshot postSnapshot1 : postSnapshot.getChildren()) {
+                            SicknessEntry entry = postSnapshot.getValue(SicknessEntry.class);
+
                             if (!postSnapshot1.getKey().equals("daysSick") && !postSnapshot1.getKey().equals("latitude") && !postSnapshot1.getKey().equals("longitude") &&
                                     !postSnapshot1.getKey().equals("markerColor") && !postSnapshot1.getKey().equals("severity") && !postSnapshot1.getKey().equals("sickness") &&
                                     !postSnapshot1.getKey().equals("type") && !postSnapshot1.getKey().equals("userId") && !postSnapshot1.getKey().equals("entryDate")) {
-                                SicknessEntry entry = postSnapshot1.getValue(SicknessEntry.class);
-
-                                LatLng position = new LatLng(entry.getLatitude(), entry.getLongitude());
-                                mMap.addMarker(new MarkerOptions()
-                                        .position(position)
-                                        .icon(BitmapDescriptorFactory.defaultMarker(entry.getMarkerColor()))
-                                        .title(entry.getType() + ": " + entry.getSickness())
-                                        .snippet("")
-                                );
+                                entry = postSnapshot1.getValue(SicknessEntry.class);
                             }
-                            else{
-                                SicknessEntry entry = postSnapshot.getValue(SicknessEntry.class);
 
-                                LatLng position = new LatLng(entry.getLatitude(), entry.getLongitude());
-                                mMap.addMarker(new MarkerOptions()
-                                        .position(position)
-                                        .icon(BitmapDescriptorFactory.defaultMarker(entry.getMarkerColor()))
-                                        .title(entry.getType() + ": " + entry.getSickness())
-                                        .snippet("")
-                                );
-                            }
+                            LatLng position = new LatLng(entry.getLatitude(), entry.getLongitude());
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(position)
+                                    .icon(BitmapDescriptorFactory.defaultMarker(entry.getMarkerColor()))
+                                    .title(entry.getType() + ": " + entry.getSickness())
+                                    .snippet("")
+                            );
                         }
                     }
                 }
