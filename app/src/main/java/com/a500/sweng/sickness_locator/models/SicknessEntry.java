@@ -4,10 +4,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
-import android.util.Log;
-
-import java.util.Date;
-
 public class SicknessEntry {
     public String type;
     public String sickness;
