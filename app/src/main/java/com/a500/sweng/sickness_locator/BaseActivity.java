@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class BaseActivity extends AppCompatActivity {
@@ -45,6 +47,7 @@ public class BaseActivity extends AppCompatActivity {
             case R.id.logout:
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 mAuth.signOut();
+                LoginManager.getInstance().logOut();
                 startActivity(new Intent(this, LoginActivity.class));
                 finish();
             default:
