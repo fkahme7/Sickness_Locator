@@ -1,12 +1,7 @@
 package com.a500.sweng.sickness_locator;
 
 import com.a500.sweng.sickness_locator.models.User;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import android.util.Log;
 import java.util.Arrays;
 
-public class UserSettingsActivity extends AppCompatActivity {
+public class UserSettingsActivity extends BaseActivity {
 
     private DatabaseReference mDatabaseUser;
     private EditText inputName, inputEmail, inputDob;
@@ -90,32 +85,5 @@ public class UserSettingsActivity extends AppCompatActivity {
                 mDatabaseUser.child(fUser.getUid()).child("gender").setValue(gender);
             }
         });
-    }
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_options, menu);
-        return true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_entry:
-                startActivity(new Intent(this, SicknessEntryActivity.class));
-                return true;
-            case R.id.menu_map:
-                startActivity(new Intent(this, MapsActivity.class));
-                return true;
-            case R.id.menu_reports:
-                //startActivity(new Intent(this, ReportsActivity.class));
-                Intent intent = new Intent(this, ReportsActivity.class);
-                startActivity(intent);
-                return true;
-            case R.id.menu_settings:
-                startActivity(new Intent(this, UserSettingsActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 }

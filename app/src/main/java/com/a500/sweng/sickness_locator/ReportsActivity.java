@@ -50,7 +50,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class ReportsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class ReportsActivity extends BaseActivity implements AdapterView.OnItemSelectedListener {
     //implements AdapterView.OnItemSelectedListener {
     //private static final String TAG = "ListDatasetsActivity";
 
