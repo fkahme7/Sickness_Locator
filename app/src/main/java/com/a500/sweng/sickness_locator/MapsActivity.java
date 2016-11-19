@@ -159,11 +159,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
+     * Here we are connecting to the firebase database and retrieving the sickness entries. We are then
+     * displaying those entries on the map. The map will default to display the current location of the
+     * user. If that permission is denied, then the map will display a default United States location.
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
