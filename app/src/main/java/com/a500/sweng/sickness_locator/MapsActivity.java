@@ -2,6 +2,7 @@ package com.a500.sweng.sickness_locator;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -10,10 +11,13 @@ import android.os.Bundle;
 
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.location.Address;
 import android.location.Geocoder;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.a500.sweng.sickness_locator.common.GlobalCache;
 import com.a500.sweng.sickness_locator.models.SicknessEntry;
@@ -22,6 +26,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.firebase.database.ChildEventListener;
@@ -44,7 +49,7 @@ import java.util.Map;
  * to access the users's current position.
  *
  */
-public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
+public class MapsActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.InfoWindowAdapter {
     private GoogleMap mMap;
     // Reference to the firebase databse
     private DatabaseReference mDatabaseSicknessEntries;
@@ -166,6 +171,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setInfoWindowAdapter(this);
         mMap.setMaxZoomPreference(mMaxZoom);
 
         mDatabaseSicknessEntries = FirebaseDatabase.getInstance().getReference("sicknessEntries");
@@ -188,7 +194,10 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
                                     .position(position)
                                     .icon(BitmapDescriptorFactory.defaultMarker(entry.getMarkerColor()))
                                     .title(entry.getType() + ": " + entry.getSickness())
-                                    .snippet("")
+                                    .snippet(
+                                        "Date Entered: " + entry.getEntryDate() + "\r\n" +
+                                        "Days Sick: " + entry.getDaysSick() + "\r\n"
+                                    )
                             );
                         }
                     }
@@ -203,6 +212,48 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
         LatLng position = new LatLng(mLatitude, mLongitude);
         mMap.moveCamera(CameraUpdateFactory.zoomTo(mZoom));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+    }
+
+    @Override
+    public View getInfoWindow(Marker marker) {
+        return null;
+    }
+
+    @Override
+    public View getInfoContents(Marker marker) {
+        return prepareInfoView(marker);
+    }
+
+    /**
+     * Override the default info window view.
+     */
+    private View prepareInfoView(Marker marker){
+        LinearLayout infoView = new LinearLayout(MapsActivity.this);
+        LinearLayout.LayoutParams infoViewParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        infoView.setOrientation(LinearLayout.HORIZONTAL);
+        infoView.setLayoutParams(infoViewParams);
+
+        LinearLayout subInfoView = new LinearLayout(MapsActivity.this);
+        LinearLayout.LayoutParams subInfoViewParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        subInfoView.setOrientation(LinearLayout.VERTICAL);
+        subInfoView.setLayoutParams(subInfoViewParams);
+
+        TextView title = new TextView(MapsActivity.this);
+        title.setText(marker.getTitle());
+        title.setGravity(Gravity.CENTER);
+        title.setTypeface(Typeface.DEFAULT_BOLD);
+
+        TextView snippet = new TextView(MapsActivity.this);
+        snippet.setText(marker.getSnippet());
+
+        subInfoView.addView(title);
+        subInfoView.addView(snippet);
+
+        infoView.addView(subInfoView);
+
+        return infoView;
     }
 
     /**
