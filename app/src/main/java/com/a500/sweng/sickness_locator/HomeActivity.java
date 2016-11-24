@@ -27,9 +27,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-/**
- * Created by tresflex on 24/11/16.
- */
 
 public class HomeActivity extends AppCompatActivity {
 
