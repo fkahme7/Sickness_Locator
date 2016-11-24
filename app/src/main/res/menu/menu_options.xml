@@ -4,6 +4,7 @@
 
     <item android:id="@+id/menu_settings"
           android:title="Settings" />
+    
 
     <item android:id="@+id/menu_entry"
           android:title="Sickness Entry" />
