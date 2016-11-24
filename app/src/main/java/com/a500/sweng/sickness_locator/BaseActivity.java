@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.a500.sweng.sickness_locator.common.AppPreferences;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -46,7 +45,6 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity(new Intent(this, UserSettingsActivity.class));
                 return true;
             case R.id.logout:
-                AppPreferences.setLoggedIn(this, false);
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 mAuth.signOut();
                 LoginManager.getInstance().logOut();

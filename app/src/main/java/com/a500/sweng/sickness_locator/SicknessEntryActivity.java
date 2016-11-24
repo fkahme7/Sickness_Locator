@@ -6,15 +6,9 @@ import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -40,7 +34,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class SicknessEntryActivity extends AppCompatActivity {
+public class SicknessEntryActivity extends BaseActivity {
     private Button btnSubmit, btnCancel;
     private Spinner typeSpinner, sicknessSpinner, severitySpinner;
     private EditText daysText;
@@ -118,7 +112,16 @@ public class SicknessEntryActivity extends AppCompatActivity {
         typeSpinner = (Spinner) findViewById(R.id.spinner);
         sicknessSpinner = (Spinner) findViewById(R.id.spinner2);
         severitySpinner = (Spinner) findViewById(R.id.spinner3);
-        daysText = (EditText) findViewById(R.id.editText) ;
+        daysText = (EditText) findViewById(R.id.editText);
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SicknessEntryActivity.this, MapsActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -300,35 +303,6 @@ public class SicknessEntryActivity extends AppCompatActivity {
 
             }
         });
-
-    }
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_options, menu);
-
-        return true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_entry:
-                startActivity(new Intent(this, SicknessEntryActivity.class));
-                return true;
-            case R.id.menu_map:
-                startActivity(new Intent(this, MapsActivity.class));
-                return true;
-            case R.id.menu_reports:
-                //startActivity(new Intent(this, ReportsActivity.class));
-                Intent intent = new Intent(this, ReportsActivity.class);
-                startActivity(intent);
-                return true;
-            case R.id.menu_settings:
-                startActivity(new Intent(this, UserSettingsActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 }
 

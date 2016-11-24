@@ -19,7 +19,6 @@ import android.location.Geocoder;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.a500.sweng.sickness_locator.common.AppPreferences;
 import com.a500.sweng.sickness_locator.common.GlobalCache;
 import com.a500.sweng.sickness_locator.models.SicknessEntry;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -80,8 +79,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
             return;
         }
         db = FirebaseDatabase.getInstance();
-        AppPreferences.setLoggedIn(this, true);
-        userDetail();
         serviceCall();
         // Try to get the users current location
         LocationManager locationmanager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -116,42 +113,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-    }
-
-    private void userDetail() {
-        final DatabaseReference ref = db.getReference("users");
-
-        Query queryRef = ref.orderByChild("name");
-
-        queryRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String previousChild) {
-                System.out.println(dataSnapshot.getValue());
-                // latList.add(name2);
-                Log.i("UsersList ==>", dataSnapshot.getValue().toString());
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.i("UsersList Array ", "onChildChanged");
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.i("UsersList Array ", "onChildRemoved");
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                Log.i("UsersList Array ", "onChildMoved");
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.i("UsersList Array ", "onChildCancelled");
-            }
-        });
     }
 
     private void serviceCall() {
