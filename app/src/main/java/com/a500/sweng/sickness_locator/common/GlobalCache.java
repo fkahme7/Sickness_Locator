@@ -33,7 +33,6 @@ public class GlobalCache {
         return sicknessEntry;
     }*/
 
-
     public List<String> getSickEntry() {
         return sickList;
     }
