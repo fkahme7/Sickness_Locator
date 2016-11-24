@@ -3,9 +3,6 @@ package com.a500.sweng.sickness_locator.common;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-/**
- * Created by tresflex on 24/11/16.
- */
 
 public class AppPreferences {
 
