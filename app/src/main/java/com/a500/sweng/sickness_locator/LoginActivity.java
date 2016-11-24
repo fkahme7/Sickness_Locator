@@ -47,10 +47,8 @@ public class LoginActivity extends AppCompatActivity {
     private CallbackManager mCallbackManager;
     private static final String TAG = "login_button";
     private DatabaseReference mDatabaseUsers;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
-
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this.getApplicationContext());
@@ -79,9 +77,24 @@ public class LoginActivity extends AppCompatActivity {
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-        //String email = inputEmail.getText().toString().trim();
-        //String password = inputPassword.getText().toString().trim();
-        //String name = inputName.getText().toString().trim();
+        // [START auth_state_listener]
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+                // [START_EXCLUDE]
+                updateUI(user);
+                // [END_EXCLUDE]
+            }
+        };
+        // [END auth_state_listener]
 
 
         mCallbackManager = CallbackManager.Factory.create();
@@ -114,6 +127,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
+
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -124,11 +139,6 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 Log.v("LoginActivity", response.toString());
-
-                                // Application code
-                                //String name = inputName.getText().toString().trim();
-                                //String email = inputEmail.getText().toString().trim();
-                                //String password = inputPassword.getText().toString().trim();
 
                             }
                         });
@@ -221,6 +231,23 @@ public class LoginActivity extends AppCompatActivity {
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        auth.addAuthStateListener(mAuthListener);
+    }
+    // [END on_start_add_listener]
+
+    // [START on_stop_remove_listener]
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            auth.removeAuthStateListener(mAuthListener);
+        }
+    }
+    // [END on_stop_remove_listener]
+
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
         // [START_EXCLUDE silent]
@@ -250,8 +277,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 });
 
-        AuthCredential facebook = FacebookAuthProvider.getCredential(token.getToken());
-        auth.signInWithCredential(facebook)
+
+        auth.signInWithCredential(credential)
                 .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -264,8 +291,8 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Authentication failed." + task.getException(),
                                     Toast.LENGTH_SHORT).show();
                         }
-                        {
-                            FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                            FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser(); {
                             if (fUser != null) {
                                 String name = inputName.getText().toString().trim();
                                 User user = new User();
@@ -281,6 +308,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
+
 
     private void updateUI(FirebaseUser user) {
         //hideProgressDialog();
