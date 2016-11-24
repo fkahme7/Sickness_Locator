@@ -4,6 +4,9 @@ import android.support.v7.widget.Toolbar;
 
 import com.a500.sweng.sickness_locator.models.SicknessEntry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class GlobalCache {
     // handler for singleton instance
@@ -12,7 +15,7 @@ public class GlobalCache {
     //LinearLayout homeImageLayout, toolbarLogoLayout;
     SicknessEntry sicknessEntry;
 
-
+    List<String> sickList = new ArrayList<String>();
 
     public static GlobalCache getInstance() {
         if (instance == null) {
@@ -22,12 +25,21 @@ public class GlobalCache {
     }
 
 
-    public void setSickEntry(SicknessEntry sicknessEntry) {
+   /* public void setSickEntry(SicknessEntry sicknessEntry) {
         this.sicknessEntry = sicknessEntry;
     }
 
     public SicknessEntry getSickEntry() {
         return sicknessEntry;
+    }*/
+
+
+    public List<String> getSickEntry() {
+        return sickList;
+    }
+
+    public void setSickEntry(List<String> sickList) {
+        this.sickList = sickList;
     }
 
 

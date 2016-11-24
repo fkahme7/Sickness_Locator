@@ -2,27 +2,34 @@ package com.a500.sweng.sickness_locator;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.a500.sweng.sickness_locator.common.AppPreferences;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity {
+
+    /**
+     * Displays the menu.
+     */
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-    }
-
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_options, menu);
         return true;
     }
 
+    /**
+     * Changes screen view.
+     * This is triggered by the user selecting an item on the menu. Will change the view to whichever
+     * option the user selects.
+     */
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_entry:
@@ -32,19 +39,20 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MapsActivity.class));
                 return true;
             case R.id.menu_reports:
-                //startActivity(new Intent(this, ReportsActivity.class));
                 Intent intent = new Intent(this, ReportsActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.menu_settings:
                 startActivity(new Intent(this, UserSettingsActivity.class));
                 return true;
-            /*case R.id.logout:
+            case R.id.logout:
+                AppPreferences.setLoggedIn(this, false);
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 mAuth.signOut();
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                LoginManager.getInstance().logOut();
+                startActivity(new Intent(this, LoginActivity.class));
                 finish();
-*/            default:
+            default:
                 return super.onOptionsItemSelected(item);
         }
     }

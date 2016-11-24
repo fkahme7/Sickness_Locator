@@ -11,4 +11,7 @@
     <item android:id="@+id/menu_reports"
           android:title="Reports" />
 
+    <item android:id="@+id/logout"
+        android:title="Logout" />
+
 </menu>
