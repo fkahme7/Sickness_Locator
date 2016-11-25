@@ -38,7 +38,11 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity(new Intent(this, SicknessEntryActivity.class));
                 return true;
             case R.id.menu_map:
-                startActivity(new Intent(this, MapsActivity.class));
+                Intent intentMap = new Intent(getApplicationContext(), MapsActivity.class);
+                intentMap.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentMap);
+
+//                startActivity(new Intent(this, MapsActivity.class));
                 return true;
             case R.id.menu_reports:
                 Intent intent = new Intent(this, ReportsActivity.class);
@@ -50,11 +54,15 @@ public class BaseActivity extends AppCompatActivity {
             case R.id.logout:
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 mAuth.signOut();
-                if(loginType.equals("Facebook")){
+                /*if(loginType.equals("Facebook")){
                     LoginManager.getInstance().logOut();
-                }
-                startActivity(new Intent(this, LoginActivity.class));
+                }*/
+                Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
+                intentLogin.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentLogin);
                 finish();
+//                startActivity(new Intent(this, LoginActivity.class));
+//                finish();
             default:
                 return super.onOptionsItemSelected(item);
         }

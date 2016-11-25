@@ -80,8 +80,10 @@ public class SicknessEntry {
         FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
 
         // Set Market Blue if marker is for current user
-        if (fUser.getUid().equals(this.userId)) {
-            return BitmapDescriptorFactory.HUE_AZURE;
+        if(fUser != null){
+            if (fUser.getUid().equals(this.userId)) {
+                return BitmapDescriptorFactory.HUE_AZURE;
+            }
         }
 
         // Otherwise set the marker color based on severity

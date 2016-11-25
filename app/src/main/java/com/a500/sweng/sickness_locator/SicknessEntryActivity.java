@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -151,6 +152,7 @@ public class SicknessEntryActivity extends BaseActivity {
 
                 FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
                 if (fUser != null) {
+                    Log.d("Sickness", "sickness entry:" + fUser.getUid());
                     String type = typeString.toString().trim();
                     String sick = sicknessString.toString().trim();
                     String sever = severityString.toString().trim();
