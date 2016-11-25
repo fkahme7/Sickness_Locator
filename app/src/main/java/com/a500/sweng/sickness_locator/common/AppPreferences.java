@@ -17,4 +17,17 @@ public class AppPreferences {
         SharedPreferences sp = c.getSharedPreferences("is_logged_in", 0);
         return sp.getBoolean("is_logged_in", false);
     }
+
+    public static void setLoginType(Context c, String mGPUserName) {
+        SharedPreferences sp = c.getSharedPreferences("LOGIN_TYPE", 0);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("LOGIN", mGPUserName);
+        editor.commit();
+    }
+
+    public static String getLoginType(Context c) {
+        SharedPreferences sp = c.getSharedPreferences("LOGIN_TYPE", 0);
+        return sp.getString("LOGIN", "");
+    }
+
 }

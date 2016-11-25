@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.a500.sweng.sickness_locator.common.AppPreferences;
 import com.a500.sweng.sickness_locator.models.User;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -48,6 +49,10 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "login_button";
     private DatabaseReference mDatabaseUsers;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    String password;
+    String email;
+    String name;
+    String loginType;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +80,9 @@ public class LoginActivity extends AppCompatActivity {
         btnReset = (Button) findViewById(R.id.btn_reset_password);
 
         //Get Firebase auth instance
-        auth = FirebaseAuth.getInstance();
+        //auth = FirebaseAuth.getInstance();
+
+        loginType = AppPreferences.getLoginType(this);
 
         // [START auth_state_listener]
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -90,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
                 // [START_EXCLUDE]
-                updateUI(user);
+                updateUI(user, loginType);
                 // [END_EXCLUDE]
             }
         };
@@ -105,16 +112,16 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
-                Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
+                /*Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
                 startActivity(intent);
-                finish();
+                finish();*/
             }
 
             @Override
             public void onCancel() {
                 Log.d(TAG, "facebook:onCancel");
                 // [START_EXCLUDE]
-                updateUI(null);
+                updateUI(null, loginType);
                 // [END_EXCLUDE]
             }
 
@@ -122,14 +129,14 @@ public class LoginActivity extends AppCompatActivity {
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
                 // [START_EXCLUDE]
-                updateUI(null);
+                updateUI(null, loginType);
                 // [END_EXCLUDE]
             }
         });
 
 
 
-        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+       /* LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
@@ -159,7 +166,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onError(FacebookException error) {
 
             }
-        });
+        });*/
 
 
 
@@ -214,6 +221,7 @@ public class LoginActivity extends AppCompatActivity {
                                         Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                                     }
                                 } else {
+                                    AppPreferences.setLoginType(getApplicationContext(), "Application");
                                     Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
                                     startActivity(intent);
                                     finish();
@@ -278,47 +286,79 @@ public class LoginActivity extends AppCompatActivity {
                 });
 
 
-        auth.signInWithCredential(credential)
-                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Toast.makeText(LoginActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
-                        progressBar.setVisibility(View.GONE);
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "Authentication failed." + task.getException(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                            FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser(); {
-                            if (fUser != null) {
-                                String name = inputName.getText().toString().trim();
-                                User user = new User();
-                                user.setEmail(name);
-                                user.setName(fUser.getEmail());
-                                mDatabaseUsers.child(fUser.getUid()).setValue(user);
-                            }
-                            startActivity(new Intent(LoginActivity.this, MapsActivity.class));
-                            finish();
-                        }
-                    }
-                });
-
-
     }
 
 
-    private void updateUI(FirebaseUser user) {
+    private void updateUI(FirebaseUser user, String loginType) {
         //hideProgressDialog();
         if (user != null) {
-            //mStatusTextView.setText(getString(R.string.facebook_status_fmt, user.getDisplayName()));
-            //mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+            if(loginType.equals("Facebook")){
+                password = "temp123";
+                email = user.getEmail();
+                name = user.getDisplayName();
+                Log.i("FbUpdate ==>", email);
+                Log.i("FbUpdate ==>", name);
+                //mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+                auth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                Toast.makeText(LoginActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
+                                if (!task.isSuccessful()) {
+                                    //Toast.makeText(LoginActivity.this, "Authentication failed." + task.getException(),Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
+                                    startActivity(intent);
+                                    finish();
 
-            findViewById(R.id.login_button).setVisibility(View.GONE);
-            //findViewById(R.id.button_facebook_signout).setVisibility(View.VISIBLE);
-        } else {
+                                /*auth.signInWithEmailAndPassword(email, password)
+                                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                                // If sign in fails, display a message to the user. If sign in succeeds
+                                                // the auth state listener will be notified and logic to handle the
+                                                // signed in user can be handled in the listener.
+                                                progressBar.setVisibility(View.GONE);
+                                                if (!task.isSuccessful()) {
+                                                    // there was an error
+                                                    if (password.length() < 6) {
+                                                        inputPassword.setError(getString(R.string.minimum_password));
+                                                    } else {
+                                                        Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
+                                                    }
+                                                } else {
+
+                                                    Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                            }
+                                        });
+*/
+
+
+                                } else {
+                                    FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+                                    if (fUser != null) {
+                                        //String name = inputName.getText().toString().trim();
+                                        User user = new User();
+                                        user.setEmail(email);
+                                        user.setName(name);
+                                        mDatabaseUsers.child(fUser.getUid()).setValue(user);
+                                    }
+                                    startActivity(new Intent(LoginActivity.this, MapsActivity.class));
+                                    finish();
+                                }
+                            }
+                        });
+
+                //findViewById(R.id.login_button).setVisibility(View.GONE);
+                //findViewById(R.id.button_facebook_signout).setVisibility(View.VISIBLE);
+            } else{
+                startActivity(new Intent(LoginActivity.this, MapsActivity.class));
+                finish();
+            }
+        }else {
             //mStatusTextView.setText(R.string.signed_out);
             //mDetailTextView.setText(null);
 

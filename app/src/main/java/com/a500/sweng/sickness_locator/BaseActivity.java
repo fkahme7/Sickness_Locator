@@ -6,19 +6,22 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.a500.sweng.sickness_locator.common.AppPreferences;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+
 
 public class BaseActivity extends AppCompatActivity {
 
     /**
      * Displays the menu.
      */
-
+    String loginType;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_options, menu);
+        loginType = AppPreferences.getLoginType(this);
         return true;
     }
 
@@ -47,7 +50,9 @@ public class BaseActivity extends AppCompatActivity {
             case R.id.logout:
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 mAuth.signOut();
-                LoginManager.getInstance().logOut();
+                if(loginType.equals("Facebook")){
+                    LoginManager.getInstance().logOut();
+                }
                 startActivity(new Intent(this, LoginActivity.class));
                 finish();
             default:
