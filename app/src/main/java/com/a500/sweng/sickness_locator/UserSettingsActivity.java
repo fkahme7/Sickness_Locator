@@ -17,6 +17,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import android.util.Log;
+import android.widget.Toast;
+
 import java.util.Arrays;
 
 public class UserSettingsActivity extends BaseActivity {
@@ -77,12 +79,16 @@ public class UserSettingsActivity extends BaseActivity {
         btnUpdateSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v){
+                String name = inputName.getText().toString().trim();
                 String dob = inputDob.getText().toString().trim();
                 String gender = genderSpinner.getSelectedItem().toString();
 
                 FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+                mDatabaseUser.child(fUser.getUid()).child("name").setValue(name);
                 mDatabaseUser.child(fUser.getUid()).child("dob").setValue(dob);
                 mDatabaseUser.child(fUser.getUid()).child("gender").setValue(gender);
+
+                Toast.makeText(getApplicationContext(), "User Settings Updated", Toast.LENGTH_LONG).show();
             }
         });
     }
