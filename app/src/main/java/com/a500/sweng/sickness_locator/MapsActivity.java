@@ -39,6 +39,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -126,16 +127,32 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChild) {
                 System.out.println(dataSnapshot.getValue());
                 Map<String, Object> value = (Map<String, Object>) dataSnapshot.getValue();
-                String name1 = String.valueOf(value.get("sickness"));
-                String name2 = String.valueOf(value.get("latitude"));
-                Log.i("sickness", String.valueOf(value.get("sickness")));
+
+                if(value.containsKey("sickness")){
+                    String name1 = String.valueOf(value.get("sickness"));
+                    String name2 = String.valueOf(value.get("latitude"));
+//                    Log.i("sickness", String.valueOf(value.get("sickness")));
+                    sickList.add(name1);
+                }else{
+                    Iterator myVeryOwnIterator = value.keySet().iterator();
+                    while(myVeryOwnIterator.hasNext()) {
+                        String key=(String)myVeryOwnIterator.next();
+//                        String strValue=(String)value.get(key);
+                        Map<String, Object> valueInner = (Map<String, Object>)value.get(key);
+//                        Log.i("sickness", "key = " + key);
+//                        Log.i("sickness", "valueInner = " + valueInner);
+                        if(valueInner.containsKey("sickness")){
+                            String name1 = String.valueOf(valueInner.get("sickness"));
+                            sickList.add(name1);
+                        }
+                    }
+                }
 
                // latList.add(name2);
-                sickList.add(name1);
                 gCache.setSickEntry(sickList);
-                Log.i("groupList Array ", sickList.toString());
-                Log.i("sickness", "value = " + value);
-                Log.i("sickness", "value size = " + value.size());
+//                Log.i("groupList Array ", sickList.toString());
+//                Log.i("sickness", "value = " + value);
+//                Log.i("sickness", "value size = " + value.size());
             }
 
             @Override
