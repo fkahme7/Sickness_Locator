@@ -71,11 +71,6 @@ public class UserSettingsActivity extends BaseActivity {
         tabSpc.setIndicator("User Profile");
         tabHost.addTab(tabSpc);
 
-        tabSpc = tabHost.newTabSpec("password");
-        tabSpc.setContent(R.id.passwordTab);
-        tabSpc.setIndicator("Password");
-        tabHost.addTab(tabSpc);
-
         btnUpdateSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v){

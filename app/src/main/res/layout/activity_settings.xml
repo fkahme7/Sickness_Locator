@@ -132,29 +132,8 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:layout_marginBottom="22dp" />
-
                     </RelativeLayout>
-
                 </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/passwordTab"
-                    android:layout_width="143dp"
-                    android:layout_height="89dp"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/editText2" />
-                    </RelativeLayout>
-
-                </LinearLayout>
-
             </FrameLayout>
         </LinearLayout>
     </TabHost>
