@@ -75,8 +75,8 @@ public class SicknessEntryActivity extends BaseActivity {
             LocationListener locationChangeListener = new LocationListener() {
                 public void onLocationChanged(Location l) {
                     if (l != null) {
-                        latitude = (long) l.getLatitude();
-                        longitude = (long) l.getLongitude();
+                        latitude = l.getLatitude();
+                        longitude = l.getLongitude();
                     }
                 }
 
@@ -165,6 +165,7 @@ public class SicknessEntryActivity extends BaseActivity {
                     entries.setType(type);
                     entries.setLatitude(latitude);
                     entries.setLongitude(longitude);
+
                     entries.setEntryDate(entryDate);
                     entries.setUserId(fUser.getUid());
 
