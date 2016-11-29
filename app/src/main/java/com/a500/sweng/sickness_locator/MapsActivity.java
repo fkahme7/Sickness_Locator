@@ -45,13 +45,16 @@ import java.util.Map;
 
 /**
  * Android activity that displays a google map. The map displays all map markers for sickness entries
- * in the firebase database. The map defaults to show the users current location, if the user allows
+ * in the Firebase database. The map defaults to show the users current location, if the user allows
  * permission. The map will display the entire United States as a default if permission is not given
  * to access the users's current position.
  *
  */
 public class MapsActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.InfoWindowAdapter {
+
+    // Main Google Map Object
     private GoogleMap mMap;
+
     // Reference to the firebase databse
     private DatabaseReference mDatabaseSicknessEntries;
 
@@ -131,16 +134,12 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
                 if(value.containsKey("sickness")){
                     String name1 = String.valueOf(value.get("sickness"));
                     String name2 = String.valueOf(value.get("latitude"));
-//                    Log.i("sickness", String.valueOf(value.get("sickness")));
                     sickList.add(name1);
                 }else{
                     Iterator myVeryOwnIterator = value.keySet().iterator();
                     while(myVeryOwnIterator.hasNext()) {
                         String key=(String)myVeryOwnIterator.next();
-//                        String strValue=(String)value.get(key);
                         Map<String, Object> valueInner = (Map<String, Object>)value.get(key);
-//                        Log.i("sickness", "key = " + key);
-//                        Log.i("sickness", "valueInner = " + valueInner);
                         if(valueInner.containsKey("sickness")){
                             String name1 = String.valueOf(valueInner.get("sickness"));
                             sickList.add(name1);
@@ -148,11 +147,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
                     }
                 }
 
-               // latList.add(name2);
                 gCache.setSickEntry(sickList);
-//                Log.i("groupList Array ", sickList.toString());
-//                Log.i("sickness", "value = " + value);
-//                Log.i("sickness", "value size = " + value.size());
             }
 
             @Override
