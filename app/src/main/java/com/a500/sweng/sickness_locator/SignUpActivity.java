@@ -111,8 +111,8 @@ public class SignUpActivity extends AppCompatActivity {
                                     if (fUser != null) {
                                         String name = inputName.getText().toString().trim();
                                         User user = new User();
-                                        user.setEmail(name);
-                                        user.setName(fUser.getEmail());
+                                        user.setEmail(fUser.getEmail());
+                                        user.setName(name);
                                         mDatabaseUsers.child(fUser.getUid()).setValue(user);
                                     }
                                     startActivity(new Intent(SignUpActivity.this, MapsActivity.class));
